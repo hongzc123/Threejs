@@ -1,5 +1,8 @@
 // 引入three.js
 import * as THREE from 'three';
+// 引入轨道控制器扩展库OrbitControls.js
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 /**
  * 创建3D场景对象Scene
  */
@@ -12,6 +15,7 @@ const scene = new THREE.Scene();
 const geometry = new THREE.BoxGeometry(100, 100, 100);
 
 //材质对象Material
+// 基础网格材质 MeshBasicMaterial 不受光照影响
 const material = new THREE.MeshBasicMaterial({
     // color: 0x0000ff, //设置材质颜色
     color: 0x00ffff, //设置材质颜色
@@ -19,11 +23,16 @@ const material = new THREE.MeshBasicMaterial({
     // opacity: 0.5 //设置透明度
 })
 
+const material2 = new THREE.MeshLambertMaterial({
+    color: 0x00ffff, //设置材质颜色
+})
+
 //网格模型对象Mesh
-const mesh = new THREE.Mesh(geometry, material);
+// const mesh = new THREE.Mesh(geometry, material);
+const mesh = new THREE.Mesh(geometry, material2);
 
 //设置网格模型在三维空间中的位置坐标，默认是坐标原点
-mesh.position.set(0,10,0);
+mesh.position.set(0, 10, 0);
 
 //网格模型添加到场景中
 scene.add(mesh);
@@ -36,12 +45,11 @@ scene.add(axesHelper)
  * 光源设置
  */
 // 点光源
-// const pointLight = new THREE.PointLight(0xffffff, 1.0)
-// const pointLight = new THREE.PointLight(0xffffff, 1, 0, 0);
-const pointLight = new THREE.PointLight(0x0000ff, 1, 0, 0);
+const pointLight = new THREE.PointLight(0xffffff, 1.0)
+// const pointLight = new THREE.PointLight(0x0000ff, 1);
 //点光源位置
-// pointLight.position.set(400, 0, 0)
-pointLight.position.set(400, 200, 300)
+// pointLight.position.set(400, 0, 0);//点光源放在x轴上
+pointLight.position.set(400, 300, 100)
 scene.add(pointLight)
 
 /**
@@ -77,3 +85,12 @@ renderer.setSize(width, height)
 renderer.render(scene, camera)
 
 document.getElementById('webgl').appendChild(renderer.domElement)
+
+// 设置相机控件轨道控制器OrbitControls
+const controls = new OrbitControls(camera, renderer.domElement)
+// 如果OrbitControls改变了相机参数，重新调用渲染器渲染三维场景
+controls.addEventListener('change', () => {
+    // 浏览器控制台查看相机位置变化
+    // console.log('camera.position', camera.position)
+    renderer.render(scene, camera)
+}) // 监听鼠标键盘事件
