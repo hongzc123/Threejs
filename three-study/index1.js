@@ -53,6 +53,13 @@ pointLight.position.set(400, 300, 100)
 scene.add(pointLight)
 
 /**
+ * 点光源辅助观察PointLightHelper
+ * 通过点光源辅助观察对象PointLightHelper (opens new window)可视化点光源
+ */
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 10)
+scene.add(pointLightHelper)
+
+/**
  * 透视投影相机
  */
 // 定义相机输出画布的尺寸(单位:像素px)
@@ -86,6 +93,9 @@ renderer.render(scene, camera)
 
 document.getElementById('webgl').appendChild(renderer.domElement)
 
+/**
+ * 相机控件OrbitControls
+ */
 // 设置相机控件轨道控制器OrbitControls
 const controls = new OrbitControls(camera, renderer.domElement)
 // 如果OrbitControls改变了相机参数，重新调用渲染器渲染三维场景
